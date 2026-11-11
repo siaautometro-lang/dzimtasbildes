@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="lv">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dzimtas bildes — senču fotogrāfiju meklēšana arhīvos</title>
+<meta name="description" content="Atrodam tavu senču fotogrāfijas Latvijas arhīvos — starpkaru pases, skolu un universitāšu lietas, karavīru dokumenti, prese un muzeju krājumi. Bezmaksas priekšpārbaude, fiksēta cena.">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400&family=Manrope:wght@400;500;600;700&display=swap">
+<style>
+body{margin:0;background:#15110D;color:#F2E8D5;font-family:'Manrope','Segoe UI',system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+a{color:#D4A24C}a:hover{color:#E8BE6B}
+h1,h2,h3{font-family:'Playfair Display',Georgia,serif;font-weight:500;letter-spacing:-0.01em}
+html{scroll-behavior:smooth}
+.wall{position:absolute;inset:-8% -5% -10% -5%;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:16px;transform:rotate(-5deg);opacity:.7;pointer-events:none}
+.ph{position:relative;aspect-ratio:3/4;border-radius:3px;overflow:hidden;border:1px solid rgba(242,232,213,.18);box-shadow:0 14px 30px rgba(0,0,0,.55);background:#2a2017}
+.ph img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:sepia(.3) contrast(1.05) brightness(.95)}
+.ph.g img{filter:grayscale(1) contrast(1.12) brightness(.9)}
+.ph.w img{filter:sepia(.55) contrast(1) brightness(1.02)}
+.ph svg{position:absolute;inset:0;width:100%;height:100%}
+.ph.doc{background:linear-gradient(160deg,#5b5547 0%,#36312a 55%,#1f1c17 100%)}
+.ph .vig{position:absolute;inset:0;background:radial-gradient(ellipse at 50% 42%,rgba(0,0,0,0) 40%,rgba(10,7,5,.5) 80%,rgba(10,7,5,.85) 100%)}
+.ph .cap{position:absolute;left:8px;bottom:7px;font:600 10px/1 'Manrope',sans-serif;letter-spacing:.12em;color:rgba(242,232,213,.75);text-transform:uppercase;white-space:nowrap}
+.ph:nth-child(2n){transform:scaleX(-1)}
+.ph:nth-child(2n) .cap{transform:scaleX(-1);left:auto;right:8px}
+.ph:nth-child(3n){transform:rotate(2.5deg) translateY(10px)}
+.ph:nth-child(3n+1){transform:rotate(-2deg)}
+.ph:nth-child(5n){transform:rotate(1.5deg) translateY(-8px) scale(1.04)}
+.ph:nth-child(7n){transform:scaleX(-1) rotate(-3deg) translateY(14px)}
+.ph:nth-child(7n) .cap{transform:scaleX(-1);left:auto;right:8px}
+.veil{position:absolute;inset:0;background:linear-gradient(90deg,rgba(21,17,13,.97) 0%,rgba(21,17,13,.9) 34%,rgba(21,17,13,.45) 62%,rgba(21,17,13,.22) 100%),linear-gradient(180deg,rgba(21,17,13,.55) 0%,rgba(21,17,13,0) 30%,rgba(21,17,13,0) 70%,#15110D 100%);pointer-events:none}
+.eyebrow{font:600 12px/1 'Manrope',sans-serif;letter-spacing:.18em;text-transform:uppercase;color:#D4A24C}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:10px;min-height:52px;padding:0 26px;border-radius:999px;font:600 15px/1 'Manrope',sans-serif;text-decoration:none;cursor:pointer;border:1px solid transparent}
+.btn-primary{background:#D4A24C;color:#15110D}.btn-primary:hover{background:#E8BE6B;color:#15110D}
+.btn-ghost{background:transparent;color:#F2E8D5;border-color:rgba(242,232,213,.3)}.btn-ghost:hover{color:#fff;border-color:rgba(242,232,213,.6)}
+.card{background:#1F1812;border:1px solid rgba(242,232,213,.1);border-radius:16px}
+.find{position:relative;aspect-ratio:3/4;border-radius:12px;overflow:hidden;background:#2a2017;border:1px solid rgba(242,232,213,.12)}
+.find img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 30%}
+.find .shade{position:absolute;inset:0;background:linear-gradient(180deg,rgba(21,17,13,0) 50%,rgba(21,17,13,.92) 100%)}
+.field{display:flex;flex-direction:column;gap:8px}
+.field label{font:600 13px/1 'Manrope',sans-serif;color:#B9A98F;letter-spacing:.04em}
+.field input,.field textarea{background:#15110D;border:1px solid rgba(242,232,213,.18);border-radius:10px;color:#F2E8D5;font:400 15px/1.4 'Manrope',sans-serif;padding:14px 16px;min-height:48px;box-sizing:border-box;width:100%}
+.field input:focus,.field textarea:focus{outline:2px solid #D4A24C;outline-offset:1px}
+.rule{height:1px;background:rgba(242,232,213,.1)}
+.hidden{display:none}
+@media (max-width: 820px){
+  .g3,.g2,.g2f{grid-template-columns:1fr !important}
+  .g4{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:14px !important}
+  .hero-h1{font-size:42px !important}
+  .hero{min-height:640px !important}
+  .wall{grid-template-columns:repeat(4,minmax(0,1fr)) !important;gap:10px !important;inset:-6% -8% -8% -8% !important}
+  .ph .cap{font-size:8px !important}
+  h2{font-size:32px !important}
+  section{padding-top:0}
+}
+</style>
+</head>
+<body>
+
+<div style="width: 100%; min-height: 100vh; box-sizing: border-box; display: flex; flex-direction: column; background: #15110D; color: #F2E8D5;">
+
+<!-- NAV -->
+<header style="position: relative; z-index: 3; display: flex; align-items: center; justify-content: space-between; gap: 24px; flex-wrap: wrap; max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 26px 24px;">
+  <a href="#top" style="display: flex; align-items: center; gap: 12px; text-decoration: none; color: #F2E8D5;">
+    <svg width="34" height="34" viewBox="0 0 34 34" aria-hidden="true"><rect x="1" y="1" width="32" height="32" rx="6" fill="none" stroke="#D4A24C" stroke-width="1.5"/><circle cx="17" cy="13" r="5.5" fill="#D4A24C"/><path d="M6 29c1.5-7 6-10 11-10s9.5 3 11 10z" fill="#D4A24C"/></svg>
+    <span style="font-family: 'Playfair Display', Georgia, serif; font-size: 22px; font-weight: 500; letter-spacing: 0.01em;">Dzimtas bildes</span>
+  </a>
+  <nav style="display: flex; align-items: center; gap: 28px; flex-wrap: wrap; font-size: 14px; font-weight: 500;">
+    <a href="#ka" style="color: #B9A98F; text-decoration: none;">Kā tas notiek</a>
+    <a href="#avoti" style="color: #B9A98F; text-decoration: none;">Ko atrodam</a>
+    <a href="#cenas" style="color: #B9A98F; text-decoration: none;">Cenas</a>
+    <a href="#buj" style="color: #B9A98F; text-decoration: none;">Jautājumi</a>
+    <a href="#forma" class="btn btn-ghost" style="min-height: 44px; padding: 0 20px;">Pārbaudīt bez maksas</a>
+  </nav>
+</header>
+
+<!-- HERO -->
+<section id="top" class="hero" style="position: relative; overflow: hidden; min-height: 780px; display: flex; align-items: center;">
+  <div class="wall" aria-hidden="true">
+    <div class="ph"><img src="img/antonija-derina.jpg" alt=""><div class="vig"></div><span class="cap">Antonija Dēriņa</span></div>
+    <div class="ph w"><img src="img/juris-martini.jpg" alt=""><div class="vig"></div><span class="cap">Juris Martini</span></div>
+    <div class="ph g"><img src="img/anna-sprogis.jpg" alt=""><div class="vig"></div><span class="cap">Anna Sproģis</span></div>
+    <div class="ph doc"><svg viewBox="0 0 90 120"><rect x="12" y="14" width="66" height="92" rx="2" fill="rgba(242,232,213,.1)" stroke="rgba(242,232,213,.28)"/><rect x="18" y="22" width="22" height="28" fill="rgba(15,11,8,.85)"/><rect x="46" y="24" width="26" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="32" width="20" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="40" width="24" height="3" fill="rgba(242,232,213,.3)"/><rect x="18" y="60" width="54" height="3" fill="rgba(242,232,213,.25)"/><rect x="18" y="68" width="40" height="3" fill="rgba(242,232,213,.25)"/><circle cx="60" cy="86" r="11" fill="none" stroke="#D4A24C" stroke-opacity=".6" stroke-width="1.5"/></svg><span class="cap">Pase</span></div>
+    <div class="ph"><img src="img/karlis-kreicbergs.jpg" alt=""><div class="vig"></div><span class="cap">Kārlis Kreicbergs</span></div>
+    <div class="ph w"><img src="img/karlis-zidilskis.jpg" alt=""><div class="vig"></div><span class="cap">Kārlis Zidilskis</span></div>
+    <div class="ph g"><img src="img/janis-strautins.jpg" alt=""><div class="vig"></div><span class="cap">Jānis Strautiņš</span></div>
+    <div class="ph"><img src="img/milda-brunsliepa.jpg" alt=""><div class="vig"></div><span class="cap">Milda Rozālija Brunsliepa</span></div>
+    <div class="ph g"><img src="img/indrikis-feldmanis.jpg" alt=""><div class="vig"></div><span class="cap">Indriķis Feldmanis</span></div>
+    <div class="ph w"><img src="img/minna-strodahs.jpg" alt=""><div class="vig"></div><span class="cap">Minna Štrodahs</span></div>
+    <div class="ph"><img src="img/kristaps-brangulis.jpg" alt=""><div class="vig"></div><span class="cap">Kristaps Brangulis</span></div>
+    <div class="ph g"><img src="img/nikolajs-karklins.jpg" alt=""><div class="vig"></div><span class="cap">Nikolajs Kārkliņš</span></div>
+    <div class="ph"><img src="img/olga-makuls.jpg" alt=""><div class="vig"></div><span class="cap">Olga Mākuls</span></div>
+    <div class="ph w"><img src="img/johans-kirsteins.jpg" alt=""><div class="vig"></div><span class="cap">Johans Aleksandrs Kiršteins</span></div>
+    <div class="ph g"><img src="img/fricis-rozkalns.jpg" alt=""><div class="vig"></div><span class="cap">Fricis Rožkalns</span></div>
+    <div class="ph doc"><svg viewBox="0 0 90 120"><rect x="12" y="14" width="66" height="92" rx="2" fill="rgba(242,232,213,.1)" stroke="rgba(242,232,213,.28)"/><rect x="18" y="22" width="22" height="28" fill="rgba(15,11,8,.85)"/><rect x="46" y="24" width="26" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="32" width="20" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="40" width="24" height="3" fill="rgba(242,232,213,.3)"/><rect x="18" y="60" width="54" height="3" fill="rgba(242,232,213,.25)"/><rect x="18" y="68" width="40" height="3" fill="rgba(242,232,213,.25)"/><circle cx="60" cy="86" r="11" fill="none" stroke="#D4A24C" stroke-opacity=".6" stroke-width="1.5"/></svg><span class="cap">Lieta</span></div>
+    <div class="ph"><img src="img/lizete-vilumsone.jpg" alt=""><div class="vig"></div><span class="cap">Lizete Viļumsone</span></div>
+    <div class="ph w"><img src="img/paulis-ezerkalns.jpg" alt=""><div class="vig"></div><span class="cap">Paulis Roberts Ezerkalns</span></div>
+    <div class="ph g"><img src="img/karlis-vabrovskis.jpg" alt=""><div class="vig"></div><span class="cap">Kārlis Vabrovskis</span></div>
+    <div class="ph"><img src="img/juris-martini.jpg" alt=""><div class="vig"></div><span class="cap">Juris Martini</span></div>
+    <div class="ph g"><img src="img/milda-brunsliepa.jpg" alt=""><div class="vig"></div><span class="cap">Milda Rozālija Brunsliepa</span></div>
+    <div class="ph w"><img src="img/antonija-derina.jpg" alt=""><div class="vig"></div><span class="cap">Antonija Dēriņa</span></div>
+    <div class="ph"><img src="img/anna-sprogis.jpg" alt=""><div class="vig"></div><span class="cap">Anna Sproģis</span></div>
+    <div class="ph g"><img src="img/nikolajs-karklins.jpg" alt=""><div class="vig"></div><span class="cap">Nikolajs Kārkliņš</span></div>
+    <div class="ph w"><img src="img/janis-strautins.jpg" alt=""><div class="vig"></div><span class="cap">Jānis Strautiņš</span></div>
+    <div class="ph"><img src="img/minna-strodahs.jpg" alt=""><div class="vig"></div><span class="cap">Minna Štrodahs</span></div>
+    <div class="ph g"><img src="img/karlis-kreicbergs.jpg" alt=""><div class="vig"></div><span class="cap">Kārlis Kreicbergs</span></div>
+    <div class="ph doc"><svg viewBox="0 0 90 120"><rect x="12" y="14" width="66" height="92" rx="2" fill="rgba(242,232,213,.1)" stroke="rgba(242,232,213,.28)"/><rect x="18" y="22" width="22" height="28" fill="rgba(15,11,8,.85)"/><rect x="46" y="24" width="26" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="32" width="20" height="3" fill="rgba(242,232,213,.3)"/><rect x="46" y="40" width="24" height="3" fill="rgba(242,232,213,.3)"/><rect x="18" y="60" width="54" height="3" fill="rgba(242,232,213,.25)"/><rect x="18" y="68" width="40" height="3" fill="rgba(242,232,213,.25)"/><circle cx="60" cy="86" r="11" fill="none" stroke="#D4A24C" stroke-opacity=".6" stroke-width="1.5"/></svg><span class="cap">LU</span></div>
+    <div class="ph"><img src="img/johans-kirsteins.jpg" alt=""><div class="vig"></div><span class="cap">Johans Aleksandrs Kiršteins</span></div>
+    <div class="ph w"><img src="img/olga-makuls.jpg" alt=""><div class="vig"></div><span class="cap">Olga Mākuls</span></div>
+    <div class="ph g"><img src="img/karlis-zidilskis.jpg" alt=""><div class="vig"></div><span class="cap">Kārlis Zidilskis</span></div>
+    <div class="ph"><img src="img/kristaps-brangulis.jpg" alt=""><div class="vig"></div><span class="cap">Kristaps Brangulis</span></div>
+  </div>
+  <div class="veil" aria-hidden="true"></div>
+
+  <div style="position: relative; z-index: 2; max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 72px 24px 96px; display: flex; flex-direction: column; gap: 28px;">
+    <span class="eyebrow">Arhīvu meklēšana · Latvija 1880–1950</span>
+    <h1 class="hero-h1" style="margin: 0; max-width: 760px; font-size: 68px; line-height: 1.02; color: #F2E8D5;">Atrodam tavu senču <em style="font-style: italic; font-weight: 400; color: #E8BE6B;">sejas</em> arhīvos</h1>
+    <p style="margin: 0; max-width: 580px; font-size: 19px; line-height: 1.55; color: #B9A98F;">Starpkaru pases, skolu un universitāšu lietas, karavīru un aizsargu dokumenti, prese un muzeju krājumi glabā fotogrāfijas, ko ģimene nekad nav redzējusi. Mēs zinām, kurā fondā skatīties — tu iedod vārdu un vietu.</p>
+    <div style="display: flex; gap: 14px; flex-wrap: wrap; align-items: center;">
+      <a href="#forma" class="btn btn-primary">Pārbaudīt bez maksas</a>
+      <a href="#ka" class="btn btn-ghost">Kā tas notiek</a>
+    </div>
+    <div style="display: flex; gap: 32px; flex-wrap: wrap; margin-top: 12px;">
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 30px; color: #F2E8D5;">1 ned.</span><span style="font-size: 13px; color: #B9A98F;">atbilde, vai ir ko meklēt</span></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 30px; color: #F2E8D5;">0 €</span><span style="font-size: 13px; color: #B9A98F;">ja neko neatrodam, nemaksā</span></div>
+      <div style="display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 30px; color: #F2E8D5;">2–4 ned.</span><span style="font-size: 13px; color: #B9A98F;">līdz gatavam portretam</span></div>
+    </div>
+  </div>
+</section>
+
+<!-- FINDS -->
+<section style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 0 24px 104px; display: flex; flex-direction: column; gap: 36px;">
+  <div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 24px; flex-wrap: wrap;">
+    <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px;">
+      <span class="eyebrow">Atradumi</span>
+      <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Sejas, kas gulēja arhīvā desmitiem gadu</h2>
+    </div>
+    <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F; max-width: 380px;">Īsti atradumi no mūsu pašu dzimtas izpētes. Katrs — no lietas, ko neviens nebija atvēris kopš tās aizvēršanas.</p>
+  </div>
+  <div class="g4" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;">
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/antonija-derina.jpg" alt="Antonija Dēriņa, Andreja meita, dz. 1909. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Antonija Dēriņa</span><span class="eyebrow" style="color: #E8BE6B;">Andreja meita · dz. 1909. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/juris-martini.jpg" alt="Juris Martini, Indriķa dēls, dz. 1885. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Juris Martini</span><span class="eyebrow" style="color: #E8BE6B;">Indriķa dēls · dz. 1885. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/karlis-kreicbergs.jpg" alt="Kārlis Kreicbergs, Jāņa dēls, dz. 1855. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Kārlis Kreicbergs</span><span class="eyebrow" style="color: #E8BE6B;">Jāņa dēls · dz. 1855. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/milda-brunsliepa.jpg" alt="Milda Rozālija Brunsliepa, dzimusi Jēkabsone, dz. 1902. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Milda Rozālija Brunsliepa</span><span class="eyebrow" style="color: #E8BE6B;">dzimusi Jēkabsone · dz. 1902. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/nikolajs-karklins.jpg" alt="Nikolajs Kārkliņš, Kristapa dēls, dz. 1905. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Nikolajs Kārkliņš</span><span class="eyebrow" style="color: #E8BE6B;">Kristapa dēls · dz. 1905. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/anna-sprogis.jpg" alt="Anna Sproģis, dzimusi Umbedahts, dz. 1887. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Anna Sproģis</span><span class="eyebrow" style="color: #E8BE6B;">dzimusi Umbedahts · dz. 1887. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/janis-strautins.jpg" alt="Jānis Strautiņš, Kārļa dēls, dz. 1898. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Jānis Strautiņš</span><span class="eyebrow" style="color: #E8BE6B;">Kārļa dēls · dz. 1898. g.</span></div></div>
+    </figure>
+    <figure style="margin: 0;">
+      <div class="find"><img src="img/olga-makuls.jpg" alt="Olga Mākuls, Indriķa meita, dz. 1905. g. — fotogrāfija no arhīva lietas"><div class="shade"></div><div style="position: absolute; left: 18px; right: 18px; bottom: 16px; display: flex; flex-direction: column; gap: 4px;"><span style="font-family: 'Playfair Display', serif; font-size: 21px; line-height: 1.15; color: #F2E8D5;">Olga Mākuls</span><span class="eyebrow" style="color: #E8BE6B;">Indriķa meita · dz. 1905. g.</span></div></div>
+    </figure>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section id="ka" style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 0 24px 104px; display: flex; flex-direction: column; gap: 40px;">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px;">
+    <span class="eyebrow">Kā tas notiek</span>
+    <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Trīs soļi līdz sejai, ko ģimene nav redzējusi</h2>
+  </div>
+  <div class="g3" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 24px;">
+    <div class="card" style="padding: 32px; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font-family: 'Playfair Display', serif; font-size: 40px; color: #D4A24C; line-height: 1;">01</span>
+      <h3 style="margin: 0; font-size: 22px;">Iedod vārdu un vietu</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Vārds, uzvārds, aptuveni dzimšanas gadi un pagasts vai pilsēta. Ja zini draudzi vai adresi — vēl labāk, bet tas nav obligāti.</p>
+    </div>
+    <div class="card" style="padding: 32px; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font-family: 'Playfair Display', serif; font-size: 40px; color: #D4A24C; line-height: 1;">02</span>
+      <h3 style="margin: 0; font-size: 22px;">Mēs meklējam arhīvos</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Nedēļas laikā pasakām, vai ir ko meklēt. Tad ejam uz LVVA lasītavu, muzeju krājumiem un presi — tur, kur meklēšana pēc vārda tiešsaistē nav iespējama.</p>
+    </div>
+    <div class="card" style="padding: 32px; display: flex; flex-direction: column; gap: 14px;">
+      <span style="font-family: 'Playfair Display', serif; font-size: 40px; color: #D4A24C; line-height: 1;">03</span>
+      <h3 style="margin: 0; font-size: 22px;">Saņem portretu un stāstu</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Fotogrāfijas kopija augstā izšķirtspējā, dokumentu kopijas un īss stāsts par to, kur un kā atradām. Digitāli vai ierāmēts uz galda.</p>
+    </div>
+  </div>
+</section>
+
+<!-- SOURCES -->
+<section id="avoti" style="background: #1F1812; border-top: 1px solid rgba(242,232,213,.08); border-bottom: 1px solid rgba(242,232,213,.08);">
+  <div style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 96px 24px; display: flex; flex-direction: column; gap: 40px;">
+    <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px;">
+      <span class="eyebrow">Ko mēs atrodam</span>
+      <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Fotogrāfijas glabājas tur, kur neviens neskatās</h2>
+    </div>
+    <div class="g3" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px;">
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">1919–1940</span><h3 style="margin: 0; font-size: 20px;">Pases ar foto</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">Rīgas prefektūras pasu lietas — ap 700 000 lietu ar ielīmētu fotogrāfiju. Galvenais avots.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">1919–1944</span><h3 style="margin: 0; font-size: 20px;">Studentu lietas</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">Latvijas Universitātes personas lietas ar foto un biogrāfiju.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">1915–1945</span><h3 style="margin: 0; font-size: 20px;">Karavīri un aizsargi</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">Strēlnieku, armijas un aizsargu organizācijas dokumenti, Kara muzeja datubāze.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">1748–šodien</span><h3 style="margin: 0; font-size: 20px;">Prese</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">Nekrologi, jubilejas, skolu izlaidumi un koru foto vairāk nekā 1 400 izdevumos.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">Muzeji</span><h3 style="margin: 0; font-size: 20px;">Novadu krājumi</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">Vairāk nekā 2 miljoni digitalizētu objektu — skolas, saimniecības, svētki.</p></div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 24px; border: 1px solid rgba(242,232,213,.1); border-radius: 14px; background: #15110D;"><span class="eyebrow" style="color: #B9A98F;">Kapsētas</span><h3 style="margin: 0; font-size: 20px;">Kapu vietas</h3><p style="margin: 0; font-size: 14px; line-height: 1.6; color: #B9A98F;">1,8 miljoni apbedīto ar kapa foto un karti — lai zinātu, kur aiznest ziedus.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- PRICING -->
+<section id="cenas" style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 104px 24px; display: flex; flex-direction: column; gap: 40px;">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 640px;">
+    <span class="eyebrow">Cenas</span>
+    <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Fiksēta cena, nevis stundas</h2>
+    <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B9A98F;">Priekšpārbaude vienmēr bez maksas. Arhīvu kopiju nodevas (parasti 1–10 €) — atsevišķi.</p>
+  </div>
+  <div style="display: grid; grid-template-columns: minmax(0, 460px); gap: 24px; align-items: stretch;">
+    <div class="card" style="padding: 36px 32px; display: flex; flex-direction: column; gap: 20px; border-color: #D4A24C;">
+      <div style="display: flex; flex-direction: column; gap: 6px;"><h3 style="margin: 0; font-size: 26px;">Seja</h3><span style="font-size: 14px; color: #B9A98F;">Viena persona</span></div>
+      <div style="display: flex; align-items: baseline; gap: 6px;"><span style="font-family: 'Playfair Display', serif; font-size: 48px; line-height: 1;">200 €</span></div>
+      <div class="rule"></div>
+      <ul style="margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; line-height: 1.5; color: #B9A98F;">
+        <li>Pases vai lietas foto, ja eksistē</li>
+        <li>Digitāla fotogrāfijas kopija augstā izšķirtspējā</li>
+        <li>1–3 dokumentu kopijas</li>
+        <li>Stāsts par avotu</li>
+      </ul>
+      <a href="#forma" class="btn btn-primary" style="margin-top: auto;">Sākt ar pārbaudi</a>
+    </div>
+  </div>
+  <p style="margin: 0; font-size: 14px; color: #B9A98F;">Papildus: ierāmēta druka, dokumentu tulkojumi, senču māju un kapu apmeklējums ar foto.</p>
+</section>
+
+<!-- FAQ -->
+<section id="buj" style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 0 24px 104px; display: flex; flex-direction: column; gap: 40px;">
+  <div style="display: flex; flex-direction: column; gap: 14px; max-width: 720px;">
+    <span class="eyebrow">Biežākie jautājumi</span>
+    <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Par senču meklēšanu un vecajām fotogrāfijām</h2>
+  </div>
+  <div class="g2" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px;">
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Kā atrast vecvecāku vai vecvecvecāku fotogrāfiju, ja ģimenē nekas nav saglabājies?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Gandrīz katram pieaugušajam, kas 1919.–1940. gadā dzīvoja Latvijā, bija pase ar ielīmētu foto. Nereti šīs pasu lietas ir saglabājušās — jāzina, kur tās meklēt, un jāiegulda darbs, lai atrastu. Papildus — skolu, Latvijas Universitātes, armijas un aizsargu lietas, prese un novadu muzeji.</p>
+    </div>
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Kādu informāciju vēl iespējams sniegt par personu?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Neatkarīgi no tā, vai fotogrāfija ir pieejama, bieži vien varam noskaidrot arī, kur un kad cilvēks dzimis, kur dzīvojis, vecāku vārdus, brāļus un māsas, bērnus un to, ar ko viņš nodarbojies.</p>
+    </div>
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Cik senus senčus var atrast?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Fotogrāfijas — reāli no 1880. līdz 1950. gadam. Dokumentus (dzimšanas, laulību, miršanas ierakstus) bieži var izsekot līdz 18. gadsimtam, bet bez sejām.</p>
+    </div>
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Ko darīt, ja neko neatrod?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Nekas nav jāmaksā. Pirms darba sākšanas pasakām, vai ir ko meklēt, un, ja fotogrāfiju neatrodam, par meklēšanu nemaksā.</p>
+    </div>
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Vai meklējat arī Latgalē, Igaunijā, Lietuvā un Krievijā?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Jā — Latgales draudzes un pagasti ir Latvijas arhīvos. Igaunijas un Lietuvas arhīvi ir pieejami tiešsaistē. Krievijas arhīvi šobrīd ir ierobežoti; to izvērtējam katrā gadījumā atsevišķi.</p>
+    </div>
+    <div class="card" style="padding: 28px; display: flex; flex-direction: column; gap: 10px;">
+      <h3 style="margin: 0; font-size: 20px;">Vai strādājat ar latviešiem ārzemēs?</h3>
+      <p style="margin: 0; font-size: 15px; line-height: 1.6; color: #B9A98F;">Jā — lielu daļu klientu veido latviešu pēcteči ASV, Kanādā, Austrālijā, Lielbritānijā un Vācijā. Atbildam angliski, rēķinu izrakstām eiro vai dolāros, rezultātu nosūtām digitāli vai pa pastu.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FORM -->
+<section id="forma" style="background: #1F1812; border-top: 1px solid rgba(242,232,213,.08);">
+  <div style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 96px 24px; display: flex; gap: 56px; flex-wrap: wrap; align-items: flex-start;">
+    <div style="flex: 1 1 380px; min-width: 0; display: flex; flex-direction: column; gap: 18px;">
+      <span class="eyebrow">Bezmaksas priekšpārbaude</span>
+      <h2 style="margin: 0; font-size: 44px; line-height: 1.1;">Vai ir ko meklēt? Atbildi sniegsim nedēļas laikā</h2>
+      <p style="margin: 0; font-size: 16px; line-height: 1.6; color: #B9A98F;">Ieraksti, ko zini. Mēs pārbaudām indeksus un atbildam uz e-pastu ar to, kas eksistē, un fiksētu piedāvājumu. Bez saistībām.</p>
+      <ul style="margin: 8px 0 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 10px; font-size: 15px; color: #B9A98F;">
+        <li style="display: flex; gap: 10px; align-items: center;"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9l4 4 8-8" fill="none" stroke="#D4A24C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Atbilde nedēļas laikā</li>
+        <li style="display: flex; gap: 10px; align-items: center;"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9l4 4 8-8" fill="none" stroke="#D4A24C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Ja neko neatrodam — nemaksā</li>
+        <li style="display: flex; gap: 10px; align-items: center;"><svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true"><path d="M3 9l4 4 8-8" fill="none" stroke="#D4A24C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>Strādājam arī ar diasporu, angliski</li>
+      </ul>
+    </div>
+    <form class="card" name="prieksparbaude" method="POST" action="/paldies.html" data-netlify="true" netlify-honeypot="bot-field" style="flex: 1 1 440px; min-width: 0; padding: 36px; display: flex; flex-direction: column; gap: 18px;">
+      <input type="hidden" name="form-name" value="prieksparbaude">
+      <p class="hidden"><label>Neaizpildi šo lauku: <input name="bot-field"></label></p>
+      <div class="g2f" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <div class="field"><label for="f-vards">Vārds</label><input id="f-vards" name="vards" type="text" placeholder="Anna" required></div>
+        <div class="field"><label for="f-uzvards">Uzvārds (arī meitas)</label><input id="f-uzvards" name="uzvards" type="text" placeholder="Bērziņa, dz. Kalniņa" required></div>
+      </div>
+      <div class="g2f" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px;">
+        <div class="field"><label for="f-gadi">Dzimšanas gadi (aptuveni)</label><input id="f-gadi" name="dzimsanas_gadi" type="text" placeholder="1895–1905"></div>
+        <div class="field"><label for="f-vieta">Vieta / draudze</label><input id="f-vieta" name="vieta" type="text" placeholder="Cēsu apriņķis, Raunas pag."></div>
+      </div>
+      <div class="field"><label for="f-zinams">Kas jau zināms</label><textarea id="f-zinams" name="kas_zinams" rows="3" placeholder="Strādāja Rīgā 20. gados, izsūtīta 1941. gadā…"></textarea></div>
+      <div class="field"><label for="f-epasts">E-pasts</label><input id="f-epasts" name="epasts" type="email" placeholder="tu@epasts.lv" required></div>
+      <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 6px;">Pārbaudīt bez maksas</button>
+      <p style="margin: 0; font-size: 12px; line-height: 1.5; color: #B9A98F;">Datus izmantojam tikai meklēšanai un atbildei. Neko nepublicējam bez tavas piekrišanas.</p>
+    </form>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer style="max-width: 1200px; width: 100%; margin: 0 auto; box-sizing: border-box; padding: 40px 24px; display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap; font-size: 13px; color: #B9A98F;">
+  <span style="font-family: 'Playfair Display', serif; font-size: 18px; color: #F2E8D5;">Dzimtas bildes · dzimtasbildes.lv</span>
+  <div style="display: flex; gap: 24px; flex-wrap: wrap;">
+    <a href="#forma" style="color: #B9A98F; text-decoration: none;">Rakstīt mums</a>
+  </div>
+  <span>© 2026 · Rīga</span>
+</footer>
+
+</div>
+</body>
+</html>
