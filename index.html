@@ -61,6 +61,7 @@ html{scroll-behavior:smooth}
 .field input:focus,.field textarea:focus{outline:2px solid #D4A24C;outline-offset:1px}
 .rule{height:1px;background:rgba(242,232,213,.1)}
 .hidden{display:none}
+.lang{display:inline-flex;align-items:center;border:1px solid rgba(242,232,213,.3);border-radius:999px;overflow:hidden;font:600 12px/1 'Manrope',sans-serif;letter-spacing:.1em}.lang a,.lang span{padding:10px 13px;color:#B9A98F;text-decoration:none}.lang a:hover{color:#F2E8D5}.lang .on{background:#D4A24C;color:#15110D}
 @media (max-width: 820px){
   .g3,.g2,.g2f{grid-template-columns:1fr !important}
   .g4{grid-template-columns:repeat(2,minmax(0,1fr)) !important;gap:14px !important}
@@ -88,9 +89,9 @@ html{scroll-behavior:smooth}
     <a href="#avoti" style="color: #B9A98F; text-decoration: none;">Ko atrodam</a>
     <a href="#cenas" style="color: #B9A98F; text-decoration: none;">Cenas</a>
     <a href="#buj" style="color: #B9A98F; text-decoration: none;">Jautājumi</a>
-    <a href="/en/" lang="en" hreflang="en" title="English" style="color: #B9A98F; text-decoration: none;">EN</a>
     <a href="tel:+37122436011" style="color: #F2E8D5; text-decoration: none;">+371 22436011</a>
     <a href="#forma" class="btn btn-ghost" style="min-height: 44px; padding: 0 20px;">Pārbaudīt bez maksas</a>
+    <span class="lang" role="group" aria-label="Valoda"><span class="on" aria-current="true">LV</span><a href="/en/" lang="en" hreflang="en" title="English">EN</a></span>
   </nav>
 </header>
 
